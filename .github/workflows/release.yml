@@ -29,8 +29,14 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          assets=(build/armv7hf/*.eap build/armv7hf/*_LICENSE.txt
-                  build/aarch64/*.eap build/aarch64/*_LICENSE.txt)
+          mkdir -p dist
+          for arch in armv7hf aarch64; do
+            cp "build/$arch"/*.eap dist/
+            for f in "build/$arch"/*_LICENSE.txt; do
+              cp "$f" "dist/$(basename "$f" _LICENSE.txt)_${arch}_LICENSE.txt"
+            done
+          done
+          ls -la dist/
           notes="ACAP application packages for Axis cameras.
 
           - \`ACAP_Video_Encoder_0_4_2_armv7hf.eap\` - 32-bit ARM cameras
@@ -44,11 +50,10 @@ jobs:
 
           Original code: MIT. Bundled FFmpeg/x264: GPL v2."
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" --clobber "${assets[@]}"
-          else
-            gh release create "$GITHUB_REF_NAME" \
-              --verify-tag \
-              --title "ACAP Video Encoder $GITHUB_REF_NAME" \
-              --notes "$notes" \
-              "${assets[@]}"
+            gh release delete "$GITHUB_REF_NAME" --yes
           fi
+          gh release create "$GITHUB_REF_NAME" \
+            --verify-tag \
+            --title "ACAP Video Encoder $GITHUB_REF_NAME" \
+            --notes "$notes" \
+            dist/*
