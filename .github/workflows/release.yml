@@ -39,8 +39,8 @@ jobs:
           ls -la dist/
           notes="ACAP application packages for Axis cameras.
 
-          - \`ACAP_Video_Encoder_0_4_2_armv7hf.eap\` - 32-bit ARM cameras
-          - \`ACAP_Video_Encoder_0_4_2_aarch64.eap\` - 64-bit ARM cameras
+          - \`ACAP_Video_Encoder_0_4_3_armv7hf.eap\` - 32-bit ARM cameras
+          - \`ACAP_Video_Encoder_0_4_3_aarch64.eap\` - 64-bit ARM cameras
 
           Install from the camera's web page (Apps > Add application) or with the
           VAPIX install API. Each package contains the corresponding FFmpeg and

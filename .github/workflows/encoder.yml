@@ -43,7 +43,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: ACAP_Video_Encoder_0_4_2_${{ matrix.arch }}
+          name: ACAP_Video_Encoder_0_4_3_${{ matrix.arch }}
           path: |
             build/${{ matrix.arch }}/*.eap
             build/${{ matrix.arch }}/*_LICENSE.txt
