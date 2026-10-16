@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build armv7hf
+        run: bash build.sh armv7hf
+
+      - name: Build aarch64
+        run: bash build.sh aarch64
+
+      - name: Create release and attach packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          assets=(build/armv7hf/*.eap build/armv7hf/*_LICENSE.txt
+                  build/aarch64/*.eap build/aarch64/*_LICENSE.txt)
+          notes="ACAP application packages for Axis cameras.
+
+          - \`ACAP_Video_Encoder_0_4_2_armv7hf.eap\` - 32-bit ARM cameras
+          - \`ACAP_Video_Encoder_0_4_2_aarch64.eap\` - 64-bit ARM cameras
+
+          Install from the camera's web page (Apps > Add application) or with the
+          VAPIX install API. Each package contains the corresponding FFmpeg and
+          x264 source, license texts, and the application source. A successful
+          build proves the packages compile; it does not prove installation on
+          a particular camera.
+
+          Original code: MIT. Bundled FFmpeg/x264: GPL v2."
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" --clobber "${assets[@]}"
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              --verify-tag \
+              --title "ACAP Video Encoder $GITHUB_REF_NAME" \
+              --notes "$notes" \
+              "${assets[@]}"
+          fi
