@@ -10,7 +10,7 @@
   "acapPackageConf": {
     "setup": {
       "friendlyName": "ACAP Video Encoder",
-      "appName": "abc_pro_encoder",
+      "appName": "acap_video_encoder",
       "vendor": "abc pvt ltd",
       "vendorId": "1234567890",
       "runMode": "respawn",

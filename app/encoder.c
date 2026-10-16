@@ -22,8 +22,8 @@
 #define MAX_LINE 4096
 #define MAX_FRAMES 1000000
 #define SD_ROOT "/var/spool/storage/SD_DISK/"
-#define FFMPEG "/usr/local/packages/timelapse_pro_encoder/lib/ffmpeg"
-#define LOCK_FILE "/tmp/timelapse-pro-export.lock"
+#define FFMPEG "/usr/local/packages/acap_video_encoder/lib/ffmpeg"
+#define LOCK_FILE "/tmp/acap-video-encoder.lock"
 
 static int hex_value(char c) {
     if (c >= '0' && c <= '9') return c - '0';
@@ -439,7 +439,7 @@ static int handle_request(FCGX_Request *request) {
     if (method && strcmp(method, "GET") == 0) {
         // The companion workflow asks this to check the encoder is installed, running and this version.
         reply(request, 400, "Bad Request",
-            "{\"error\":{\"message\":\"Use POST\"},\"encoder\":\"timelapse_pro_encoder\",\"api\":3}");
+            "{\"error\":{\"message\":\"Use POST\"},\"encoder\":\"acap_video_encoder\",\"api\":3}");
         return -1;
     }
     if (!method || strcmp(method, "POST") != 0) {
@@ -478,7 +478,7 @@ static int handle_request(FCGX_Request *request) {
 }
 
 int main(void) {
-    openlog("timelapse-pro-encoder", LOG_PID, LOG_USER);
+    openlog("acap-video-encoder", LOG_PID, LOG_USER);
     // Everything the encoder writes is read, and later deleted, by the companion workflow.
     umask(022);
     // Job processes are never waited for here; let the kernel reap them.
