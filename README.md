@@ -79,6 +79,13 @@ runs both architectures on every push and pull request that touches the build in
   pressure on the device) need the hardware, so a green build proves the package compiles, not that
   it runs on a camera.
 
+## Open source
+
+This project is open source and available for anyone to use, modify, and build upon under the
+terms of the MIT License (see [`LICENSE`](LICENSE)).
+
+Contributions, improvements, and ideas are welcome.
+
 ## Licensing
 
 The build enables GPL components: FFmpeg and x264 are compiled into the package, FFmpeg's GPLv2
