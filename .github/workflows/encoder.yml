@@ -1,0 +1,50 @@
+name: Build encoder
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'build.sh'
+      - 'build-ffmpeg.sh'
+      - 'Dockerfile'
+      - '.github/workflows/encoder.yml'
+  pull_request:
+    paths:
+      - 'app/**'
+      - 'build.sh'
+      - 'build-ffmpeg.sh'
+      - 'Dockerfile'
+      - '.github/workflows/encoder.yml'
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [armv7hf, aarch64]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build ${{ matrix.arch }}
+        run: bash build.sh ${{ matrix.arch }}
+
+      - name: Upload package
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ACAP_Video_Encoder_0_4_2_${{ matrix.arch }}
+          path: |
+            build/${{ matrix.arch }}/*.eap
+            build/${{ matrix.arch }}/*_LICENSE.txt
+          if-no-files-found: error
+          retention-days: 7
