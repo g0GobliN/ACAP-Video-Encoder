@@ -12,9 +12,9 @@
       "friendlyName": "ACAP Video Encoder",
       "appName": "acap_video_encoder",
       "vendor": "g0GobliN",
-      "vendorId": "g0GobliN",
+      "vendorId": "1234567890",
       "runMode": "respawn",
-      "version": "0.4.2",
+      "version": "0.4.3",
       "compatibleOsVersions": [
         { "max": "13" }
       ]
