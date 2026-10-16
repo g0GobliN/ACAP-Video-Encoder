@@ -11,8 +11,8 @@
     "setup": {
       "friendlyName": "ACAP Video Encoder",
       "appName": "acap_video_encoder",
-      "vendor": "abc pvt ltd",
-      "vendorId": "1234567890",
+      "vendor": "g0GobliN",
+      "vendorId": "g0GobliN",
       "runMode": "respawn",
       "version": "0.4.2",
       "compatibleOsVersions": [
