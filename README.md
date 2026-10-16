@@ -7,20 +7,25 @@ into the same package.
 
 ## The problem
 
-Timelapse-style capture leaves thousands of JPEGs on the camera. Copying every frame to a
-workstation to encode it spends most of its time moving data that never needed to leave the
-device; encoding on camera keeps frames local and makes the video a side effect of the capture.
+Encoding image sequences into video on a resource-constrained device presents a different set of
+challenges from doing the same work on a workstation. Moving thousands of JPEGs off the device
+adds unnecessary data transfer, while encoding locally requires careful management of CPU usage,
+memory, and output integrity.
 
-The trade is real: the camera has no hardware video encoder an app can feed photos into, so the
-encode runs on CPU and the result is larger than a carefully tuned offline encode. The engineering
-problem is making that trade predictable on a constrained, unattended device.
+This project explores on-device H.264 encoding for Axis cameras, converting JPEG sequences stored
+on the camera's SD card into MP4 video without transferring the source frames to another machine.
 
 ## How it works
 
-A companion capture workflow on the same camera writes an ffconcat frame list to the SD card and
-POSTs a form-encoded request to a single authenticated FastCGI endpoint (no UI, no sessions). The
-encoder validates, forks a detached background job, and answers `202 Accepted`; the job execs
-FFmpeg and reports progress through side files next to the output. Cancellation signals that job.
+The encoder is a headless C application packaged as an Axis ACAP application. It exposes an
+authenticated FastCGI endpoint for starting and managing encoding jobs.
+
+A request identifies the input frame sequence and output location. The encoder validates the
+inputs, launches FFmpeg as a background process, and exposes job progress through status files.
+Cancellation is supported, and the final MP4 is published only after FFmpeg completes successfully.
+
+This keeps the encoding workflow asynchronous while protecting the output from being mistaken for
+a completed video when an encode fails.
 
 ## Architecture
 
