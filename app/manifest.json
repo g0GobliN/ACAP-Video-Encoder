@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "2.2.0",
+  "resources": {
+    "linux": {
+      "user": {
+        "groups": ["storage"]
+      }
+    }
+  },
+  "acapPackageConf": {
+    "setup": {
+      "friendlyName": "ACAP Video Encoder",
+      "appName": "abc_pro_encoder",
+      "vendor": "abc pvt ltd",
+      "vendorId": "1234567890",
+      "runMode": "respawn",
+      "version": "0.4.2",
+      "compatibleOsVersions": [
+        { "max": "13" }
+      ]
+    },
+    "configuration": {
+      "httpConfig": [
+        { "access": "operator", "name": "export.cgi", "type": "fastCgi" }
+      ]
+    }
+  }
+}
